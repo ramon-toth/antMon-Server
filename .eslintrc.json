@@ -1,0 +1,55 @@
+{
+    "env": {
+        "commonjs": true,
+        "es2021": true,
+        "node": true
+    },
+    "extends": [
+        "eslint:recommended",
+        "prettier", 
+        "plugin:prettier/recommended" 
+    ],
+    "parserOptions": {
+        "ecmaVersion": 12
+    },
+    "rules": {
+        "indent": "off",
+        "linebreak-style": [
+            "error",
+            "unix"
+        ],
+        "quotes": [
+            "error",
+            "single"
+        ],
+        "semi": [
+            "error",
+            "always"
+        ],
+        "no-undef": "off",
+        "no-unused-vars": "off",
+        "no-async-promise-executor": "off"
+    },
+    "overrides": [{
+        "files": ["*.ts", "*.tsx"],
+        "parser": "@typescript-eslint/parser",
+        "extends": [
+          "plugin:@typescript-eslint/recommended", 
+          "prettier", 
+          "plugin:prettier/recommended"
+        ],
+        "parserOptions": {
+          "ecmaVersion": 2020,
+          "sourceType": "module" 
+        },
+        "rules": {
+            "@typescript-eslint/explicit-module-boundary-types": "off",
+            "@typescript-eslint/no-explicit-any": "off",
+            "@typescript-eslint/no-empty-function": "off",
+            "@typescript-eslint/no-unused-vars": "off",
+            "no-var": "off",
+            "no-console":"warn"
+        }
+    
+    }]
+}
