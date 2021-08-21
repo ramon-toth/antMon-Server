@@ -28,7 +28,7 @@ const statsHandler = (req, res) => {
     res.end();
     return;
   }
-  resJson(res, LATEST_STATS);
+  resJson(req, res, LATEST_STATS);
 };
 
 // /online
@@ -47,13 +47,13 @@ const onlineHandler = (req, res) => {
       online: stats.online
     };
   });
-  resJson(res, online);
+  resJson(req, res, online);
 };
 
 ////////////////////////////////////////////////////////////////////////////////
 // Utilitiy functions
 
-function resJson(res, data) {
+function resJson(req, res, data) {
   logger(200, req);
   res.setHeader('Content-Type', 'application/json');
   res.end(JSON.stringify(data));

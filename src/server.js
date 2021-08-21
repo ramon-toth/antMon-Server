@@ -20,7 +20,7 @@ io.on('connection', (socket) => {
 
   socket.on('farm', (f) => {
     farm = f;
-    console.log('Connected farm:', farm.name);
+    console.log(timestamp(), 'Connected farm:', farm.name);
     socket.join(farm);
   });
 
