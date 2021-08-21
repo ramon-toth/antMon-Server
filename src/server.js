@@ -27,10 +27,11 @@ io.on('connection', (socket) => {
   socket.on('message', (msg) => {
     msg.map((data) => data.stats && insertStats(data));
     LATEST_STATS = msg;
+    console.log(timestamp(), 'Stats updated');
   });
 
   socket.on('disconnect', () => {
-    console.log('Farm Disconnected');
+    console.log(timestamp(), 'Farm Disconnected');
   });
 });
 
@@ -38,17 +39,13 @@ httpServer.listen(port);
 
 console.log(timestamp(), `Server listening on port ${port}`);
 
-httpServer.on('error', (err) => {
-  console.log(err);
-});
-
 function authenticate(socket, next) {
   const token = socket.handshake.auth.token;
   if (token === process.env.API_KEY) {
     next();
   } else {
     const err = new Error('Connection Error: Unauthorized!');
-    console.log('Unauthorized connection attempt from:', getSocketIP(socket));
+    console.log(timestamp(), 'Unauthorized connection attempt from:', getSocketIP(socket));
     next(err);
   }
 }

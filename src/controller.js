@@ -1,4 +1,5 @@
 import { LATEST_STATS } from './server.js';
+import { timestamp } from './utils.js';
 
 export function httpListener(req, res) {
   const url = req.url;
@@ -12,6 +13,7 @@ export function httpListener(req, res) {
     statsHandler(req, res);
     return;
   }
+  logger(404, req);
   res.writeHead(404);
   res.end();
 }
@@ -21,6 +23,7 @@ export function httpListener(req, res) {
 // /stats
 const statsHandler = (req, res) => {
   if (LATEST_STATS.length < 1) {
+    logger(204, req);
     res.writeHead(204);
     res.end();
     return;
@@ -31,6 +34,7 @@ const statsHandler = (req, res) => {
 // /online
 const onlineHandler = (req, res) => {
   if (LATEST_STATS.length < 1) {
+    logger(204, req);
     res.writeHead(204);
     res.end();
     return;
@@ -50,6 +54,11 @@ const onlineHandler = (req, res) => {
 // Utilitiy functions
 
 function resJson(res, data) {
+  logger(200, req);
   res.setHeader('Content-Type', 'application/json');
   res.end(JSON.stringify(data));
+}
+
+function logger(code, req) {
+  console.log(timestamp(), `API: ${req.method} ${req.url} - ${code}`);
 }
