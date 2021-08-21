@@ -1,16 +1,31 @@
 import mysql from 'mysql';
 import { MYSQL_SERVER } from './config.js';
+import { timestamp } from './utils.js';
 
-const connection = mysql.createConnection(MYSQL_SERVER);
+var connection;
+connectMySQL();
 
-connection.connect(function (err) {
-  if (err) {
-    console.error('MySQL Connection Error: ' + err.stack);
-    return;
-  }
+function connectMySQL() {
+  connection = mysql.createConnection(MYSQL_SERVER);
 
-  console.log('MySQL Connected as ID ' + connection.threadId);
-});
+  connection.connect(function (err) {
+    if (err) {
+      console.log(timestamp(), 'MySQL Connection Error:', err.code);
+      console.log(timestamp(), 'Attempting to reconnect in 10 seconds...');
+      setTimeout(connectMySQL, 10000);
+    }
+    connection.threadId && console.log(timestamp(), 'MySQL Connected as ID ' + connection.threadId);
+  });
+
+  connection.on('error', function (err) {
+    console.log(timestamp(), 'MySQL Error', err.code);
+    if (err.code === 'PROTOCOL_CONNECTION_LOST') {
+      connectMySQL();
+    } else {
+      throw err;
+    }
+  });
+}
 
 function prepInsert(data) {
   const workerStats = Object.values(data);

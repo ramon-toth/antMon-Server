@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 import { insertStats } from './mysql.js';
-import { getSocketIP } from './utils.js';
+import { getSocketIP, timestamp } from './utils.js';
 import { httpListener } from './controller.js';
 
 dotenv.config();
@@ -11,6 +11,7 @@ const httpServer = createServer(httpListener);
 const io = new Server(httpServer, {});
 
 export var LATEST_STATS = [];
+const port = process.env.PORT || 3033;
 
 io.use(authenticate);
 
@@ -33,7 +34,13 @@ io.on('connection', (socket) => {
   });
 });
 
-httpServer.listen(3033);
+httpServer.listen(port);
+
+console.log(timestamp(), `Server listening on port ${port}`);
+
+httpServer.on('error', (err) => {
+  console.log(err);
+});
 
 function authenticate(socket, next) {
   const token = socket.handshake.auth.token;

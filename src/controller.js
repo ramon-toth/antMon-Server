@@ -12,7 +12,6 @@ export function httpListener(req, res) {
     statsHandler(req, res);
     return;
   }
-
   res.writeHead(404);
   res.end();
 }
