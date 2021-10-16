@@ -44,7 +44,7 @@ function authenticate(socket, next) {
   if (token === process.env.API_KEY) {
     next();
   } else {
-    const err = new Error('Connection Error: Unauthorized!');
+    const err = new Error(timestamp(), 'Connection Error: Unauthorized!');
     console.log(timestamp(), 'Unauthorized connection attempt from:', getSocketIP(socket));
     next(err);
   }
